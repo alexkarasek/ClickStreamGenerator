@@ -7,7 +7,7 @@ namespace ClickStreamGenerator
     {
         static void Main(string[] args)
         {
-            string brokerList = "wn0-akkafk.e5iwdzxyzlruzlicnwt0pywypa.cx.internal.cloudapp.net:9092,wn1-akkafk.e5iwdzxyzlruzlicnwt0pywypa.cx.internal.cloudapp.net:9092";
+            string brokerList = "[broker address1]:9092,[broker address2]:9092, [broker address3]:9092, [broker address4]:9092";
             string topicName = "test";
             int sessionctr = 0;
             int maxclicks = 10;
