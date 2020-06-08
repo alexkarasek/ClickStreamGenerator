@@ -10,10 +10,10 @@ namespace ClickStreamGenerator
             string brokerList = "[broker address1]:9092,[broker address2]:9092, [broker address3]:9092, [broker address4]:9092";
             string topicName = "test";
             int sessionctr = 0;
-            int maxclicks = 10;
+            int maxclicks = 1000;
             int maxProductId = 10000;
             int minProductId = 9900;
-            int nosessions = 10;
+            int nosessions = 10000;
             int nocats = 10;
 
             int sessionDuration = 10000;
