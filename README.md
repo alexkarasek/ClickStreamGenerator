@@ -8,10 +8,10 @@ productid => random productid generated as int between bounds described below
 timestamp => timestamp of simulated activity  
 category => category id assigned based on product heiarchy
 
-And parameter values (stored as variables inside of the code) should be updated to assign values for: 
+In order to run this project, update appsettings.json file to assign values for: 
 
-brokerList => Kafka brokers 
-topicName => name of Kafka topic  
+brokerList => Azure Event Hub hostname 
+topicName => name of Event Hub (topic)
 sessionctr = 0;  //hard coded seed for session iterator  
 maxclicks = max number of "clicks" per session  
 maxProductId = upper bound for random productid to be generated  
