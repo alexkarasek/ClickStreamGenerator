@@ -1,5 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace ClickStreamGenerator
 {
@@ -7,16 +9,27 @@ namespace ClickStreamGenerator
     {
         static void Main(string[] args)
         {
-            string brokerList = "[broker address1]:9092,[broker address2]:9092, [broker address3]:9092, [broker address4]:9092";
-            string topicName = "test";
-            int sessionctr = 0;
-            int maxclicks = 1000;
-            int maxProductId = 10000;
-            int minProductId = 9900;
-            int nosessions = 10000;
-            int nocats = 10;
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            int sessionDuration = 10000;
+            IConfigurationRoot config = builder.Build();
+
+            string topicName = config["topicName"];
+            int sessionctr = Int32.Parse(config["sessionctr"]);
+            int maxclicks = Int32.Parse(config["maxclicks"]);
+            int maxProductId = Int32.Parse(config["maxProductId"]);
+            int minProductId = Int32.Parse(config["minProductId"]);
+            int nosessions = Int32.Parse(config["nosessions"]);
+            int nocats = Int32.Parse(config["nocats"]);
+
+            string brokerList = config["brokerList"];
+            string connectionString = config["connectionString"];
+            string caCertLocation =config["caCertLocation"];
+            string consumerGroup = config["consumerGroup"];
+
+            
+            int sessionDuration = Int32.Parse(config["sessionDuration"]);
 
             DateTime timestamp = DateTime.Now;
  
