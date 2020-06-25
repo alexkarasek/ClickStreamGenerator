@@ -10,16 +10,26 @@ namespace ClickStreamGenerator
 {
     public class KafkaProducer
     {
-        public  KafkaProducer(string brokerList, string topicName, string msg)
+        public  KafkaProducer(string connectionString, string brokerList, string topicName, string msg, string caCertLocation)
         {
-            Producer(brokerList, topicName, msg).Wait();
+            Producer(connectionString, brokerList, topicName, msg, caCertLocation).Wait();
         }
 
-        public static async Task Producer(string brokerList, string topicName, string msg)
+        public static async Task Producer(string connectionString, string brokerList, string topicName, string msg, string caCertLocation)
         {
 
 
-            var config = new ProducerConfig { BootstrapServers = brokerList };
+            //var config = new ProducerConfig { BootstrapServers = brokerList };
+
+            var config = new ProducerConfig 
+            { 
+                BootstrapServers = brokerList,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslMechanism = SaslMechanism.Plain,
+                SaslUsername = "$ConnectionString",
+                SaslPassword = connectionString,
+                SslCaLocation = caCertLocation
+            };
 
             using (var producer = new ProducerBuilder<string, string>(config).Build())
             {
