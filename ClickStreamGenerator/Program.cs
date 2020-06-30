@@ -68,7 +68,7 @@ namespace ClickStreamGenerator
                     //Console.WriteLine("Current Timestamp is:" + click.timestamp.ToString());
                     //Console.WriteLine("Current ProductCategory is:" + click.productid % nocats);
                     Console.WriteLine(click);
-                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
+//                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
                     
                     //Add Category and deserialize class into JSON
                 }
