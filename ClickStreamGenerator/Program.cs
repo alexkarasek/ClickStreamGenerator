@@ -16,6 +16,7 @@ namespace ClickStreamGenerator
             IConfigurationRoot config = builder.Build();
 
             string topicName = config["topicName"];
+
             int sessionctr = Int32.Parse(config["sessionctr"]);
             int maxclicks = Int32.Parse(config["maxclicks"]);
             int maxProductId = Int32.Parse(config["maxProductId"]);
@@ -23,8 +24,20 @@ namespace ClickStreamGenerator
             int nosessions = Int32.Parse(config["nosessions"]);
             int nocats = Int32.Parse(config["nocats"]);
 
-            string brokerList = config["brokerList"];
-            string connectionString = config["connectionString"];
+            string connectionString = null;
+            if(args.Length != 1)
+            {
+                connectionString = config["connectionString"];
+                //Console.WriteLine("Please supply connection string");
+                //return;
+            }
+            else
+            {
+                connectionString = args[0];
+            }
+            //string brokerList = config["brokerList"];
+            string brokerList = connectionString.Substring(14, connectionString.IndexOf("/;") - 14) + ":9093";
+
             string caCertLocation =config["caCertLocation"];
             string consumerGroup = config["consumerGroup"];
 
@@ -68,7 +81,9 @@ namespace ClickStreamGenerator
                     //Console.WriteLine("Current Timestamp is:" + click.timestamp.ToString());
                     //Console.WriteLine("Current ProductCategory is:" + click.productid % nocats);
                     Console.WriteLine(click);
-                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
+                    Console.WriteLine(brokerList);
+                    //Console.WriteLine(topicName);
+                    //KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
                     
                     //Add Category and deserialize class into JSON
                 }
