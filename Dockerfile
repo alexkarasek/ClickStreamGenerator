@@ -37,9 +37,8 @@ WORKDIR /app/publish
 
 # ENTRYPOINT ["/app/entrypoint.sh"]
 CMD /app/entrypoint.sh
-
-
-# docker run --name stream -it -e hostName="[Host Name]" -e sasKeyName="[SAS Key]" -e sasKeyValue="[SAS KEY VALUE]" -e eventHubName="[Event Hub Name]" stream 
+ 
 # docker build . -t alexk002/wwiclickstreamgenerator:1
+# docker run --name stream -it -e hostName="[Host Name]" -e sasKeyName="[SAS Key]" -e sasKeyValue="[SAS KEY VALUE]" -e eventHubName="[Event Hub Name]" stream
 # docker push alexk002/wwiclickstreamgenerator:1
 # az container create -g dockercontainerRG --name [container name] --image alexk002/wwiclickstreamgenerator:1 --environment-variables 'hostName'='[EH Host Name]' 'sasKeyName'='RootManageSharedAccessKey' 'sasKeyValue'='[SAS Key]' 'eventHubName'='[Event Hub Name]' --cpu 1 --memory 3.5 
