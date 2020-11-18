@@ -24,19 +24,17 @@ namespace ClickStreamGenerator
             int nosessions = Int32.Parse(config["nosessions"]);
             int nocats = Int32.Parse(config["nocats"]);
 
-            string connectionString = null;
-            if(args.Length != 1)
-            {
-                connectionString = config["connectionString"];
-                //Console.WriteLine("Please supply connection string");
-                //return;
-            }
-            else
-            {
-                connectionString = args[0];
-            }
+            Console.WriteLine(args.Length);
+
+            string hostName = args[0];
+            string sasKeyName = args[1];
+            string sasKeyValue = args[2];
+            string eventHubName = args[3];
+
+            string connectionString = "Endpoint=sb://" + hostName + ".servicebus.windows.net/;SharedAccessKeyName=" + sasKeyName + ";SharedAccessKey=" + sasKeyValue + ";EntityPath=" + eventHubName;
+
             //string brokerList = config["brokerList"];
-            string brokerList = connectionString.Substring(14, connectionString.IndexOf("/;") - 14) + ":9093";
+            string brokerList = hostName + ".servicebus.windows.net:9093";
 
             string caCertLocation =config["caCertLocation"];
             string consumerGroup = config["consumerGroup"];
@@ -81,7 +79,7 @@ namespace ClickStreamGenerator
                     //Console.WriteLine("Current Timestamp is:" + click.timestamp.ToString());
                     //Console.WriteLine("Current ProductCategory is:" + click.productid % nocats);
                     Console.WriteLine(click);
-                    Console.WriteLine(brokerList);
+                    Console.WriteLine(connectionString);
                     //Console.WriteLine(topicName);
                     //KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
                     
