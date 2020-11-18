@@ -37,3 +37,5 @@ WORKDIR /app/publish
 
 # ENTRYPOINT ["/app/entrypoint.sh"]
 CMD /app/entrypoint.sh
+
+# docker run --name stream -it -e hostName="[Host Name]" -e sasKeyName="[SAS Key]" -e sasKeyValue="[SAS KEY VALUE]" -e eventHubName="[Event Hub Name]" stream 

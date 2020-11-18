@@ -1,2 +1,3 @@
 #!/bin/bash
-cd /app/publish & dotnet ClickStreamGenerator.dll $hostName $sasKeyName $sasKeyValue $eventHubName
+cd /app/publish & 
+sh -c "dotnet ClickStreamGenerator.dll \"$hostName\" \"$sasKeyName\" \"$sasKeyValue\" \"$eventHubName\""

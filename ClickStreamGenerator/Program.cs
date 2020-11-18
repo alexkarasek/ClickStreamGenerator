@@ -15,7 +15,7 @@ namespace ClickStreamGenerator
 
             IConfigurationRoot config = builder.Build();
 
-            string topicName = config["topicName"];
+            //string topicName = config["topicName"];
 
             int sessionctr = Int32.Parse(config["sessionctr"]);
             int maxclicks = Int32.Parse(config["maxclicks"]);
@@ -26,11 +26,27 @@ namespace ClickStreamGenerator
 
             Console.WriteLine(args.Length);
 
-            string hostName = args[0];
-            string sasKeyName = args[1];
-            string sasKeyValue = args[2];
-            string eventHubName = args[3];
+            string hostName = null;
+            string sasKeyName = null;
+            string sasKeyValue = null;
+            string eventHubName = null;
 
+            if(args.Length != 4 || args[0]=="" || args[1] =="" || args[2] == "" || args[3] == "")
+            {
+                hostName = config["hostName"];
+                sasKeyName = config["sasKeyName"];
+                sasKeyValue = config["sasKeyValue"];
+                eventHubName = config["eventHubName"];
+            
+            }
+            else
+            {
+                hostName = args[0];
+                sasKeyName = args[1];
+                sasKeyValue = args[2];
+                eventHubName = args[3];
+                        
+            }
             string connectionString = "Endpoint=sb://" + hostName + ".servicebus.windows.net/;SharedAccessKeyName=" + sasKeyName + ";SharedAccessKey=" + sasKeyValue + ";EntityPath=" + eventHubName;
 
             //string brokerList = config["brokerList"];
@@ -81,7 +97,7 @@ namespace ClickStreamGenerator
                     Console.WriteLine(click);
                     Console.WriteLine(connectionString);
                     //Console.WriteLine(topicName);
-                    //KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
+                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, eventHubName, click.ToString(), caCertLocation);
                     
                     //Add Category and deserialize class into JSON
                 }
