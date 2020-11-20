@@ -15,7 +15,8 @@ namespace ClickStreamGenerator
 
             IConfigurationRoot config = builder.Build();
 
-            string topicName = config["topicName"];
+            //string topicName = config["topicName"];
+
             int sessionctr = Int32.Parse(config["sessionctr"]);
             int maxclicks = Int32.Parse(config["maxclicks"]);
             int maxProductId = Int32.Parse(config["maxProductId"]);
@@ -23,8 +24,34 @@ namespace ClickStreamGenerator
             int nosessions = Int32.Parse(config["nosessions"]);
             int nocats = Int32.Parse(config["nocats"]);
 
-            string brokerList = config["brokerList"];
-            string connectionString = config["connectionString"];
+            Console.WriteLine(args.Length);
+
+            string hostName = null;
+            string sasKeyName = null;
+            string sasKeyValue = null;
+            string eventHubName = null;
+
+            if(args.Length != 4 || args[0]=="" || args[1] =="" || args[2] == "" || args[3] == "")
+            {
+                hostName = config["hostName"];
+                sasKeyName = config["sasKeyName"];
+                sasKeyValue = config["sasKeyValue"];
+                eventHubName = config["eventHubName"];
+            
+            }
+            else
+            {
+                hostName = args[0];
+                sasKeyName = args[1];
+                sasKeyValue = args[2];
+                eventHubName = args[3];
+                        
+            }
+            string connectionString = "Endpoint=sb://" + hostName + ".servicebus.windows.net/;SharedAccessKeyName=" + sasKeyName + ";SharedAccessKey=" + sasKeyValue + ";EntityPath=" + eventHubName;
+
+            //string brokerList = config["brokerList"];
+            string brokerList = hostName + ".servicebus.windows.net:9093";
+
             string caCertLocation =config["caCertLocation"];
             string consumerGroup = config["consumerGroup"];
 
@@ -68,7 +95,9 @@ namespace ClickStreamGenerator
                     //Console.WriteLine("Current Timestamp is:" + click.timestamp.ToString());
                     //Console.WriteLine("Current ProductCategory is:" + click.productid % nocats);
                     Console.WriteLine(click);
-                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, topicName, click.ToString(), caCertLocation);
+                    Console.WriteLine(connectionString);
+                    //Console.WriteLine(topicName);
+                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, eventHubName, click.ToString(), caCertLocation);
                     
                     //Add Category and deserialize class into JSON
                 }
