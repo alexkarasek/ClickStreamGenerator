@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Confluent.Kafka;
 
 namespace ClickStreamGenerator
 {
@@ -59,6 +60,16 @@ namespace ClickStreamGenerator
             int sessionDuration = Int32.Parse(config["sessionDuration"]);
 
             DateTime timestamp = DateTime.Now;
+
+            var kconfig = new ProducerConfig 
+            { 
+                BootstrapServers = brokerList,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslMechanism = SaslMechanism.Plain,
+                SaslUsername = "$ConnectionString",
+                SaslPassword = connectionString,
+                SslCaLocation = caCertLocation
+            };
  
             while (++sessionctr < nosessions)
             {
@@ -94,11 +105,29 @@ namespace ClickStreamGenerator
                     //Console.WriteLine("Current ProductId is:" + click.productid.ToString());
                     //Console.WriteLine("Current Timestamp is:" + click.timestamp.ToString());
                     //Console.WriteLine("Current ProductCategory is:" + click.productid % nocats);
-                    Console.WriteLine(click);
-                    Console.WriteLine(connectionString);
+                    Console.WriteLine(clickctr);
+                    //Console.WriteLine(connectionString);
                     //Console.WriteLine(topicName);
-                    KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, eventHubName, click.ToString(), caCertLocation);
-                    
+
+                    //is this too expensive???
+                    //KafkaProducer kafkaProducer = new KafkaProducer(connectionString, brokerList, eventHubName, click.ToString(), caCertLocation);
+                    {
+
+                        using (var producer = new ProducerBuilder<string, string>(kconfig).Build())
+                        {
+                            var deliveryReport =  producer.ProduceAsync(
+                            eventHubName, new Message<string, string> { Key = "key" , Value = click.ToString() });
+
+                            //Console.WriteLine($"delivered to: {deliveryReport.()}");
+                        }
+
+
+
+                    }
+
+
+
+
                     //Add Category and deserialize class into JSON
                 }
             }
